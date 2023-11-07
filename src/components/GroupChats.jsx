@@ -2,11 +2,12 @@ import "./GroupChats.css";
 import React, { useState, useEffect } from "react";
 import arrow from "../assets/arrow.png";
 
-export default function GroupChats({ selectedGroup }) {
+export default function GroupChats({ selectedGroup}) {
   const [receiveData, setReceiveData] = useState({
     name: "",
     initial: "",
-    color: ""
+    color: "",
+    uniqueKey:""
   });
   
   const [content, setContent] = useState(""); // State to store textarea content
@@ -20,17 +21,18 @@ export default function GroupChats({ selectedGroup }) {
           const savedGroup = JSON.parse(savedGroupJSON);
           
           setReceiveData({
-            ...receiveData,
+            
             name: savedGroup.groupName,
             initial: savedGroup.initial,
             color: savedGroup.groupColor
           });
-  
-          const key = `setContent_${savedGroup.groupName}`;
-          const savedContent = localStorage.getItem(key);
-          if (savedContent) {
-            setContentList([savedContent]);
-          }
+  console.log("this is savedGroup", savedGroup);
+         
+  const key = `setContent_${savedGroup.groupName}`;
+  const savedContent = JSON.parse(localStorage.getItem(key)) || [];
+  setContentList(savedContent);
+
+         
         } catch (error) {
           console.error("Error parsing JSON:", error);
         }
@@ -38,23 +40,34 @@ export default function GroupChats({ selectedGroup }) {
     }
     
   }, [selectedGroup]);
-  
-  
+ 
 
   console.log(receiveData);
 
-
-  
   const handleContent = () => {
     if (!content) return; // Don't add empty content
-
-    const key = `setContent_${receiveName}`;
-    const newContent = `${localStorage.getItem(key) || ""}\n${content}`;
-    
-    localStorage.setItem(key, newContent);
-    setContentList((prevContentList) => [...prevContentList, newContent]);
+  
+    const key = `setContent_${receiveData.name}`;
+  
+    const existingContent = JSON.parse(localStorage.getItem(key)) || [];
+    const newContent = {
+      message: content,
+      timestamp: Date.now()
+    };
+  
+    const updatedContent = [...existingContent, newContent];
+  
+    localStorage.setItem(key, JSON.stringify(updatedContent));
+  
+    setContentList(updatedContent);
     setContent("");
   };
+  
+  
+
+  
+  
+  
 const handleContentChange = (e) => {
   if (e.key === 'Enter') {
     e.preventDefault(); // Prevents a newline character from being inserted
@@ -112,22 +125,30 @@ const handleContentChange = (e) => {
       
 </div>
 
-<div className="displayContent">
-        <div className="display">
-          {contentList.map((item, index) => (
-            <div key={index} className="contentItem">
-              {item.split('\n').map((line, lineIndex) => (
-                <div className="chatContent" key={lineIndex}>
-                  <div className="dateAndTime">
-                    {formatDateTime(new Date())}
-                  </div>
-                  <div className="line">{line}</div>
-                </div>
-              ))}
+<div className="display">
+  {contentList.map((item, index) => (
+    <div key={index} className="contentItem">
+      {typeof item === 'string' ? (
+        item.split('\n').map((line, lineIndex) => (
+          <div className="chatContent" key={lineIndex}>
+            <div className="dateAndTime">
+              {formatDateTime(new Date())}
             </div>
-          ))}
+            <div className="line">{line}</div>
+          </div>
+        ))
+      ) : (
+        <div className="chatContent" key={index}>
+          <div className="dateAndTime">
+            {formatDateTime(new Date(item.timestamp))}
+          </div>
+          <div className="line">{item.message}</div>
         </div>
-      </div>
+      )}
+    </div>
+  ))}
+</div>
+
     </>
 
 

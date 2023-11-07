@@ -18,13 +18,20 @@ export default function FirstPage() {
   const [chat, setChat] = useState(false);
   const [activeGroup, setActiveGroup] = useState(null);
 
-  const handleGroupChats = (groupName, initial, groupColor) => {
-    setSelectedGroup({ groupName, initial, groupColor });
-    localStorage.setItem("selectedGroupMain", JSON.stringify(selectedGroup));    
-    setActiveGroup(groupName);
+  const handleGroupChats = (groupName, initial, groupColor, key) => {
+    const uniqueKey = Date.now(); // Generate a unique key
+  
+    // Create the selectedGroup object with the new uniqueKey
+    const selectedGroup = { groupName, initial, groupColor, key: uniqueKey };
+  
+    setSelectedGroup(selectedGroup);
     
+    localStorage.setItem("selectedGroupMain", JSON.stringify(selectedGroup));
+  
+    setActiveGroup(groupName);
     setChat(true);
-}
+  };
+  
 useEffect(() => {
   if (selectedGroup) {
     localStorage.setItem("selectedGroupMain", JSON.stringify(selectedGroup));
@@ -37,6 +44,7 @@ useEffect(() => {
   };
 
   const handleCreateGroupCallback = (newGroup) => {
+    
     setGroups([...groups, newGroup]);
     setShowPopup(false);
     localStorage.setItem("groups", JSON.stringify([...groups, newGroup]));

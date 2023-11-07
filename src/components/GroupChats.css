@@ -96,7 +96,7 @@ textarea::placeholder {
   .chatContent{
     display: flex;
     gap: 40px;
-    margin-top: 5%;
+    margin-top: 10%;
     margin-left: 6%;
     height: fit-content;
     font-family: Roboto;
