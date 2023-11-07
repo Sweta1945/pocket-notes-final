@@ -138,3 +138,22 @@ z-index: 2;
     font-size: 20px;
     font-weight: 800;
 }
+
+@media (max-width: 767px) {
+    .firstPage {
+      flex-direction: column;
+    }
+  
+    .leftSide {
+      width: 100%;
+      height: 100%;
+      order: 2; /* Move leftSide to the bottom */
+    }
+  
+    .firstPageImg, .pocketNotes, .message {
+      display: none; /* Hide rightSide on mobile */
+    }
+
+    
+  }
+  

@@ -1,5 +1,6 @@
 
 import "./FirstPage.css";
+
 import endImage from "../assets/endToend.png";
 import firstPage_img from "../assets/firstPage_image.png";
 import message from "../assets/message.png";
@@ -59,6 +60,7 @@ useEffect(() => {
     }
   }, []);
 
+  
   return (
     <div className="firstPage">
       <div className="leftSide">

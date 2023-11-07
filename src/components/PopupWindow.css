@@ -112,3 +112,58 @@
     padding-right: 30px;
   }
   
+
+  @media (max-width: 767px) {
+    .popup {
+      margin: 0;
+      width: 70%;
+      height: 50vh;
+      
+      left: 5%;
+      top: 5%;
+    }
+
+    .popup-container{
+      display: flex;
+      flex-direction: column;
+      
+    }
+
+    .popupInput{
+      margin-top: 10px;
+    }
+
+    .color-options {
+      position: absolute;
+     
+      left: 2%;
+      transform: translate(-30%, 10%);
+      top:30%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      margin-top: 15px;
+     }
+
+     .selectColors{
+      
+      
+     
+      
+      position: relative;
+      top: 10%;
+      
+      margin-right: 40px;
+      
+    }
+.groupName{
+  font-weight: 1500;
+}
+    .create{
+      position: absolute;
+      top: 80%;
+      transform: translate(10%, 35%);
+    }
+  }
+  

@@ -10,6 +10,7 @@ export default function PopupWindow({ onClose, onCreateGroup }) {
       const newGroup = {
         name: groupName,
         color: selectedColor,
+        
       };
     
       onCreateGroup(newGroup);

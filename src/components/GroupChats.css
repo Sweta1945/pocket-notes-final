@@ -126,3 +126,27 @@ width: 20%;
   }
 
  
+  @media (max-width: 767px) {
+  .displayContent{
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000000;
+
+  }
+
+  .display{
+    width: 100vw;
+    height: 100vh;
+    z-index: 100000;
+  }
+
+  .chatContent{
+    margin-top: 20%;
+  }
+
+  .inputText{
+    margin-left: -3px;
+  }
+
+ 
+  }
