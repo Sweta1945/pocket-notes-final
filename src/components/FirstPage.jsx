@@ -14,25 +14,23 @@ import GroupChats from "./GroupChats";
 export default function FirstPage() {
   const [groups, setGroups] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
-  const [selectedGroup, setSelectedGroup] = useState(null);
+  const [selectedGroup, setSelectedGroup] = useState();
   const [chat, setChat] = useState(false);
   const [activeGroup, setActiveGroup] = useState(null);
 
   const handleGroupChats = (groupName, initial, groupColor) => {
     setSelectedGroup({ groupName, initial, groupColor });
-    localStorage.setItem("selectedGroupName", groupName);
-    localStorage.setItem("selectedGroupInitial", initial);
-    localStorage.setItem("selectedGroupColor", groupColor);
+    localStorage.setItem("selectedGroupMain", JSON.stringify(selectedGroup));    
     setActiveGroup(groupName);
     
     setChat(true);
 }
+useEffect(() => {
+  if (selectedGroup) {
+    localStorage.setItem("selectedGroupMain", JSON.stringify(selectedGroup));
+  }
+}, [selectedGroup]);
 
-  useEffect(() => {
-    if (selectedGroup !== null) {
-      localStorage.setItem("selectedGroup", selectedGroup);
-    }
-  }, [selectedGroup]);
 
   const handleCreateGroup = () => {
     setShowPopup(true);
@@ -106,7 +104,7 @@ export default function FirstPage() {
       <div className="rightSide">
 
         {chat ? (
-          <GroupChats  />) : (
+          <GroupChats selectedGroup={selectedGroup} />) : (
           <>
             <img
               src={firstPage_img}
