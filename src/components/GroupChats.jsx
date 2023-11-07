@@ -2,45 +2,55 @@ import "./GroupChats.css";
 import React, { useState, useEffect } from "react";
 import arrow from "../assets/arrow.png";
 
-export default function GroupChats() {
-  const [receiveName, setReceiveName] = useState("");
-  const [receiveInitial, setReceiveInitial] = useState("");
-  const [receiveColor, setReceiveColor] = useState("");
+export default function GroupChats({ selectedGroup }) {
+  const [receiveData, setReceiveData] = useState({
+    name: "",
+    initial: "",
+    color: ""
+  });
+  
   const [content, setContent] = useState(""); // State to store textarea content
   const [contentList, setContentList] = useState([]); // State to store list of contents
 
   useEffect(() => {
-    const savedGroupName = localStorage.getItem("selectedGroupName");
-    const savedGroupInitial = localStorage.getItem("selectedGroupInitial");
-    const savedGroupColor = localStorage.getItem("selectedGroupColor");
-
-    if (savedGroupName) {
-      setReceiveName(savedGroupName);
+    if (selectedGroup) {
+      const savedGroupJSON = localStorage.getItem("selectedGroupMain");
+      if (savedGroupJSON) {
+        try {
+          const savedGroup = JSON.parse(savedGroupJSON);
+          
+          setReceiveData({
+            ...receiveData,
+            name: savedGroup.groupName,
+            initial: savedGroup.initial,
+            color: savedGroup.groupColor
+          });
+  
+          const key = `setContent_${savedGroup.groupName}`;
+          const savedContent = localStorage.getItem(key);
+          if (savedContent) {
+            setContentList([savedContent]);
+          }
+        } catch (error) {
+          console.error("Error parsing JSON:", error);
+        }
+      }
     }
+    
+  }, [selectedGroup]);
+  
+  
 
-    if (savedGroupInitial) {
-      setReceiveInitial(savedGroupInitial);
-    }
+  console.log(receiveData);
 
-    if (savedGroupColor) {
-      setReceiveColor(savedGroupColor);
-    }
-
-    const key = `setContent_${savedGroupName}`;
-    const savedContent = localStorage.getItem(key);
-    if (savedContent) {
-      setContentList([savedContent]);
-    }
-  });
 
   
   const handleContent = () => {
     if (!content) return; // Don't add empty content
 
     const key = `setContent_${receiveName}`;
-    const newContent = localStorage.getItem(key)
-      ? `${localStorage.getItem(key)}\n${content}`
-      : "";
+    const newContent = `${localStorage.getItem(key) || ""}\n${content}`;
+    
     localStorage.setItem(key, newContent);
     setContentList((prevContentList) => [...prevContentList, newContent]);
     setContent("");
@@ -66,7 +76,6 @@ const handleContentChange = (e) => {
     return <>{formattedTime}  <br /><br/> {formattedDate}</>;
   }
 
-  console.log(contentList)
   return (
     <>
     <div className="groupChats">
@@ -76,13 +85,13 @@ const handleContentChange = (e) => {
           width: "50px",
           height: "50px",
           borderRadius: "50%",
-          backgroundColor: receiveColor,
+          backgroundColor: receiveData.color,
           color: "white",
         }}
       >
-        {receiveInitial}
+        {receiveData.initial}
       </div>
-      <div className="chatHeading">{receiveName}</div>
+      <div className="chatHeading">{receiveData.name}</div>
       
         <textarea
           className="inputText"
